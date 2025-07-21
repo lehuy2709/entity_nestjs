@@ -1,31 +1,44 @@
-import {Body, Controller, Delete, Get, Param, Post, Put, SerializeOptions} from "@nestjs/common";
-import {ExamGroupService} from "./services";
-import {ExamGroupReq} from "./dtos";
-import {ApiTags} from "@nestjs/swagger";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Inject,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
+import { ExamGroupService } from './services';
+import { ApiHeader, ApiTags } from '@nestjs/swagger';
+import { ExamGroupReq } from './dtos';
+import { ExamGroupResI, ExamGroupServiceToken } from '../../shares';
 
 @ApiTags('ExamGroup')
-
-@Controller('/examGroups')
+@Controller('/examGroup')
 export class ExamGroupController {
-  constructor(private examGroupService: ExamGroupService) {}
+  // dependency injection
+  constructor(
+    @Inject(ExamGroupServiceToken)
+    private ExamGroupService: ExamGroupService,
+  ) {}
 
   @Get()
   get() {
-    return []
+    return this.ExamGroupService.find();
   }
 
   @Post()
-  create(@Body() cls: ExamGroupReq) {
-    return this.examGroupService.create(cls)
+  create(@Body() examGroup: ExamGroupReq) {
+    return this.ExamGroupService.create(examGroup);
   }
-  //
-  // @Put('/:id')
-  // update(@Param('id') id: number, @Body() teacher: ExamGroupReq): ExamGroupRes {
-  //   return this.examGroupService.update(id, cls)
-  // }
-  //
-  // @Delete('/:id')
-  // delete(@Param('id') id: number){
-  //   return this.examGroupService.delete(id)
-  // }
+
+  @Put('/:id')
+  update(@Param('id') id: number, @Body() examGroup: ExamGroupReq) {
+    return this.ExamGroupService.updateOne(id, examGroup);
+  }
+
+  @Delete('/:id')
+  delete(@Param('id') id: number) {
+    return this.ExamGroupService.softDelete(id);
+  }
 }

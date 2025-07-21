@@ -1,31 +1,40 @@
-import {Body, Controller, Delete, Get, Param, Post, Put, SerializeOptions} from "@nestjs/common";
+import {
+  Body,
+  Controller, Delete,
+  Get, Inject, Param,
+  Post, Put,
+} from "@nestjs/common";
 import {ClassService} from "./services";
+import {ApiHeader, ApiTags } from "@nestjs/swagger";
 import {ClassReq} from "./dtos";
-import {ApiHeaders, ApiTags} from "@nestjs/swagger";
+import {ClassResI, ClassServiceToken} from "../../shares";
 
 @ApiTags('Class')
-
 @Controller('/classes')
 export class ClassController {
-  constructor(private classService: ClassService) {}
+  // dependency injection
+  constructor(
+    @Inject(ClassServiceToken)
+    private classService: ClassService
+  ) {}
 
   @Get()
   get() {
-    return []
+    return this.classService.find()
   }
 
   @Post()
   create(@Body() cls: ClassReq) {
     return this.classService.create(cls)
   }
-  //
-  // @Put('/:id')
-  // update(@Param('id') id: number, @Body() teacher: ClassReq): ClassRes {
-  //   return this.classService.update(id, cls)
-  // }
-  //
-  // @Delete('/:id')
-  // delete(@Param('id') id: number){
-  //   return this.classService.delete(id)
-  // }
+
+  @Put('/:id')
+  update(@Param('id') id: number, @Body() cls: ClassReq) {
+    return this.classService.updateOne(id, cls)
+  }
+
+  @Delete('/:id')
+  delete(@Param('id') id: number) {
+    return this.classService.softDelete(id)
+  }
 }

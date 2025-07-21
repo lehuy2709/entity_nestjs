@@ -1,35 +1,44 @@
-import {Body, Controller, Delete, Get, Param, Post, Put, SerializeOptions} from "@nestjs/common";
-import {UserService} from "./services";
-import {UserReq} from "./dtos";
-import {ApiHeaders, ApiTags} from "@nestjs/swagger";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Inject,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
+import { UserService } from './services';
+import { ApiHeader, ApiTags } from '@nestjs/swagger';
+import { UserReq } from './dtos';
+import { UserResI, UserServiceToken } from '../../shares';
 
 @ApiTags('User')
-// @ApiHeaders({
-//   name: 'authorization',
-//   description: 'Custom header'
-// })
-
-@Controller('/users')
+@Controller('/user')
 export class UserController {
-  constructor(private userService: UserService) {}
+  // dependency injection
+  constructor(
+    @Inject(UserServiceToken)
+    private UserService: UserService,
+  ) {}
 
   @Get()
   get() {
-    return []
+    return this.UserService.find();
   }
 
   @Post()
   create(@Body() user: UserReq) {
-    return this.userService.create(user)
+    return this.UserService.create(user);
   }
-  //
-  // @Put('/:id')
-  // update(@Param('id') id: number, @Body() teacher: UserReq): UserRes {
-  //   return this.userService.update(id, cls)
-  // }
-  //
-  // @Delete('/:id')
-  // delete(@Param('id') id: number){
-  //   return this.userService.delete(id)
-  // }
+
+  @Put('/:id')
+  update(@Param('id') id: number, @Body() user: UserReq) {
+    return this.UserService.updateOne(id, user);
+  }
+
+  @Delete('/:id')
+  delete(@Param('id') id: number) {
+    return this.UserService.softDelete(id);
+  }
 }

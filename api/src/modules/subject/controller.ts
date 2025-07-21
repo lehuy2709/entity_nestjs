@@ -1,31 +1,44 @@
-import {Body, Controller, Delete, Get, Param, Post, Put, SerializeOptions} from "@nestjs/common";
-import {SubjectService} from "./services";
-import {SubjectReq} from "./dtos";
-import {ApiHeaders, ApiTags} from "@nestjs/swagger";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Inject,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
+import { SubjectService } from './services';
+import { ApiHeader, ApiTags } from '@nestjs/swagger';
+import { SubjectReq } from './dtos';
+import { SubjectResI, SubjectServiceToken } from '../../shares';
 
 @ApiTags('Subject')
-
-@Controller('/subjects')
+@Controller('/subject')
 export class SubjectController {
-  constructor(private subjectService: SubjectService) {}
+  // dependency injection
+  constructor(
+    @Inject(SubjectServiceToken)
+    private SubjectService: SubjectService,
+  ) {}
 
   @Get()
   get() {
-    return []
+    return this.SubjectService.find();
   }
 
   @Post()
   create(@Body() subject: SubjectReq) {
-    return this.subjectService.create(subject)
+    return this.SubjectService.create(subject);
   }
-  //
-  // @Put('/:id')
-  // update(@Param('id') id: number, @Body() teacher: SubjectReq): SubjectRes {
-  //   return this.subjectService.update(id, cls)
-  // }
-  //
-  // @Delete('/:id')
-  // delete(@Param('id') id: number){
-  //   return this.subjectService.delete(id)
-  // }
+
+  @Put('/:id')
+  update(@Param('id') id: number, @Body() subject: SubjectReq) {
+    return this.SubjectService.updateOne(id, subject);
+  }
+
+  @Delete('/:id')
+  delete(@Param('id') id: number) {
+    return this.SubjectService.softDelete(id);
+  }
 }

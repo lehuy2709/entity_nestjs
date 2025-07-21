@@ -1,35 +1,44 @@
-import {Body, Controller, Delete, Get, Param, Post, Put, SerializeOptions} from "@nestjs/common";
-import {FileService} from "././services";
-import {FileReq} from "./dtos";
-import {ApiHeaders, ApiTags} from "@nestjs/swagger";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Inject,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
+import { FileService } from './services';
+import { ApiHeader, ApiTags } from '@nestjs/swagger';
+import { FileReq } from './dtos';
+import { FileResI, FileServiceToken } from '../../shares';
 
 @ApiTags('File')
-// @ApiHeaders({
-//   name: 'authorization',
-//   description: 'Custom header'
-// })
-
-@Controller('/files')
+@Controller('/file')
 export class FileController {
-  constructor(private fileService: FileService) {}
+  // dependency injection
+  constructor(
+    @Inject(FileServiceToken)
+    private FileService: FileService,
+  ) {}
 
   @Get()
   get() {
-    return []
+    return this.FileService.find();
   }
 
   @Post()
   create(@Body() file: FileReq) {
-    return this.fileService.create(file)
+    return this.FileService.create(file);
   }
-  //
-  // @Put('/:id')
-  // update(@Param('id') id: number, @Body() teacher: FileReq): FileRes {
-  //   return this.fileService.update(id, cls)
-  // }
-  //
-  // @Delete('/:id')
-  // delete(@Param('id') id: number){
-  //   return this.fileService.delete(id)
-  // }
+
+  @Put('/:id')
+  update(@Param('id') id: number, @Body() file: FileReq) {
+    return this.FileService.updateOne(id, file);
+  }
+
+  @Delete('/:id')
+  delete(@Param('id') id: number) {
+    return this.FileService.softDelete(id);
+  }
 }

@@ -1,35 +1,40 @@
-import {Body, Controller, Delete, Get, Param, Post, Put, SerializeOptions} from "@nestjs/common";
+import {
+  Body,
+  Controller, Delete,
+  Get, Inject, Param,
+  Post, Put,
+} from "@nestjs/common";
 import {AnswerService} from "./services";
+import {ApiHeader, ApiTags } from "@nestjs/swagger";
 import {AnswerReq} from "./dtos";
-import {ApiHeaders, ApiTags} from "@nestjs/swagger";
+import {AnswerResI, AnswerServiceToken} from "../../shares";
 
 @ApiTags('Answer')
-// @ApiHeaders({
-//   name: 'authorization',
-//   description: 'Custom header'
-// })
-
-@Controller('/Answers')
+@Controller('/answer')
 export class AnswerController {
-  constructor(private AnswerService: AnswerService) {}
+  // dependency injection
+  constructor(
+    @Inject(AnswerServiceToken)
+    private AnswerService: AnswerService
+  ) {}
 
   @Get()
   get() {
-    return []
+    return this.AnswerService.find()
   }
 
   @Post()
-  create(@Body() Answer: AnswerReq) {
-    return this.AnswerService.create(Answer)
+  create(@Body() answer: AnswerReq) {
+    return this.AnswerService.create(answer)
   }
-  //
-  // @Put('/:id')
-  // update(@Param('id') id: number, @Body() teacher: AnswerReq): AnswerRes {
-  //   return this.AnswerService.update(id, cls)
-  // }
-  //
-  // @Delete('/:id')
-  // delete(@Param('id') id: number){
-  //   return this.AnswerService.delete(id)
-  // }
+
+  @Put('/:id')
+  update(@Param('id') id: number, @Body() answer: AnswerReq) {
+    return this.AnswerService.updateOne(id, answer)
+  }
+
+  @Delete('/:id')
+  delete(@Param('id') id: number) {
+    return this.AnswerService.softDelete(id)
+  }
 }

@@ -1,7 +1,7 @@
 import { BaseEntity } from '../base/entities';
 import { Column, Entity } from 'typeorm';
 
-@Entity('exam_result')
+@Entity('examResult')
 export class ExamResultEntity extends BaseEntity {
   @Column()
   user_id: number;

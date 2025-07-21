@@ -1,35 +1,44 @@
-import {Body, Controller, Delete, Get, Param, Post, Put, SerializeOptions} from "@nestjs/common";
-import {JobService} from "./services";
-import {JobReq} from "./dtos";
-import {ApiHeaders, ApiTags} from "@nestjs/swagger";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Inject,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
+import { JobService } from './services';
+import { ApiHeader, ApiTags } from '@nestjs/swagger';
+import { JobReq } from './dtos';
+import { JobResI, JobServiceToken } from '../../shares';
 
 @ApiTags('Job')
-// @ApiHeaders({
-//   name: 'authorization',
-//   description: 'Custom header'
-// })
-
-@Controller('/jobs')
+@Controller('/job')
 export class JobController {
-  constructor(private jobService: JobService) {}
+  // dependency injection
+  constructor(
+    @Inject(JobServiceToken)
+    private JobService: JobService,
+  ) {}
 
   @Get()
   get() {
-    return []
+    return this.JobService.find();
   }
 
   @Post()
   create(@Body() job: JobReq) {
-    return this.jobService.create(job)
+    return this.JobService.create(job);
   }
-  //
-  // @Put('/:id')
-  // update(@Param('id') id: number, @Body() teacher: JobReq): JobRes {
-  //   return this.jobService.update(id, cls)
-  // }
-  //
-  // @Delete('/:id')
-  // delete(@Param('id') id: number){
-  //   return this.jobService.delete(id)
-  // }
+
+  @Put('/:id')
+  update(@Param('id') id: number, @Body() job: JobReq) {
+    return this.JobService.updateOne(id, job);
+  }
+
+  @Delete('/:id')
+  delete(@Param('id') id: number) {
+    return this.JobService.softDelete(id);
+  }
 }

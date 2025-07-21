@@ -1,35 +1,40 @@
-import {Body, Controller, Delete, Get, Param, Post, Put, SerializeOptions} from "@nestjs/common";
+import {
+  Body,
+  Controller, Delete,
+  Get, Inject, Param,
+  Post, Put,
+} from "@nestjs/common";
 import {ExamResultService} from "./services";
-import {ApiHeaders, ApiTags} from "@nestjs/swagger";
-import { ExamResultReq } from './dtos';
+import {ApiHeader, ApiTags } from "@nestjs/swagger";
+import {ExamResultReq} from "./dtos";
+import {ExamResultResI, ExamResultServiceToken} from "../../shares";
 
 @ApiTags('ExamResult')
-// @ApiHeaders({
-//   name: 'authorization',
-//   description: 'Custom header'
-// })
-
-@Controller('/ExamResults')
+@Controller('/examResult')
 export class ExamResultController {
-  constructor(private ExamResultService: ExamResultService) {}
+  // dependency injection
+  constructor(
+    @Inject(ExamResultServiceToken)
+    private ExamResultService: ExamResultService
+  ) {}
 
   @Get()
   get() {
-    return []
+    return this.ExamResultService.find()
   }
 
   @Post()
-  create(@Body() ExamResult: ExamResultReq) {
-    return this.ExamResultService.create(ExamResult)
+  create(@Body() examResult: ExamResultReq) {
+    return this.ExamResultService.create(examResult)
   }
-  //
-  // @Put('/:id')
-  // update(@Param('id') id: number, @Body() teacher: ExamResultReq): ExamResultRes {
-  //   return this.ExamResultService.update(id, cls)
-  // }
-  //
-  // @Delete('/:id')
-  // delete(@Param('id') id: number){
-  //   return this.ExamResultService.delete(id)
-  // }
+
+  @Put('/:id')
+  update(@Param('id') id: number, @Body() examResult: ExamResultReq) {
+    return this.ExamResultService.updateOne(id, examResult)
+  }
+
+  @Delete('/:id')
+  delete(@Param('id') id: number) {
+    return this.ExamResultService.softDelete(id)
+  }
 }

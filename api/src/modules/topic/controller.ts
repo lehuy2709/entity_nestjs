@@ -1,35 +1,44 @@
-import {Body, Controller, Delete, Get, Param, Post, Put, SerializeOptions} from "@nestjs/common";
-import {TopicService} from "./services";
-import {TopicReq} from "./dtos";
-import {ApiHeaders, ApiTags} from "@nestjs/swagger";
+import {
+  Body,
+  Controller,
+  Delete,
+  Get,
+  Inject,
+  Param,
+  Post,
+  Put,
+} from '@nestjs/common';
+import { TopicService } from './services';
+import { ApiHeader, ApiTags } from '@nestjs/swagger';
+import { TopicReq } from './dtos';
+import { TopicResI, TopicServiceToken } from '../../shares';
 
 @ApiTags('Topic')
-// @ApiHeaders({
-//   name: 'authorization',
-//   description: 'Custom header'
-// })
-
-@Controller('/Topics')
+@Controller('/topic')
 export class TopicController {
-  constructor(private TopicService: TopicService) {}
+  // dependency injection
+  constructor(
+    @Inject(TopicServiceToken)
+    private TopicService: TopicService,
+  ) {}
 
   @Get()
   get() {
-    return []
+    return this.TopicService.find();
   }
 
   @Post()
-  create(@Body() Topic: TopicReq) {
-    return this.TopicService.create(Topic)
+  create(@Body() topic: TopicReq) {
+    return this.TopicService.create(topic);
   }
-  //
-  // @Put('/:id')
-  // update(@Param('id') id: number, @Body() teacher: TopicReq): TopicRes {
-  //   return this.TopicService.update(id, cls)
-  // }
-  //
-  // @Delete('/:id')
-  // delete(@Param('id') id: number){
-  //   return this.TopicService.delete(id)
-  // }
+
+  @Put('/:id')
+  update(@Param('id') id: number, @Body() topic: TopicReq) {
+    return this.TopicService.updateOne(id, topic);
+  }
+
+  @Delete('/:id')
+  delete(@Param('id') id: number) {
+    return this.TopicService.softDelete(id);
+  }
 }
