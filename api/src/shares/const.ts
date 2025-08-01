@@ -18,3 +18,6 @@ export const StudentServiceToken = Symbol('StudentServiceI')
 export const ClassUserEntityRepository = Symbol('ClassUserEntityRepository');
 export const UserEntityRepository = Symbol('UserEntityRepository');
 
+export const ImageEntityRepository= Symbol("ImageEntityRepository");
+export const ImageServiceToken= Symbol("ImageServiceI");
+export const CLOUDINARY= Symbol("CLOUDINARY");

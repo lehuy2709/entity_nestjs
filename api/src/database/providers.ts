@@ -5,6 +5,7 @@ import { ExamEntity } from 'src/modules/exam/entities';
 import { ExamGroupsEntity } from 'src/modules/exam_group/entities';
 import { ExamResultEntity } from 'src/modules/exam_result/entities';
 import { FileEntity } from 'src/modules/file/entities';
+import { ImageEntity } from 'src/modules/image/entities';
 import { JobEntity } from 'src/modules/job/entities';
 import { QuestionEntity } from 'src/modules/question/entities';
 import { SubjectEntity } from 'src/modules/subject/entities';
@@ -36,7 +37,8 @@ export const databaseProviders = [
           ExamResultEntity,
           TopicEntity,
           FileEntity,
-          JobEntity
+          JobEntity,
+          ImageEntity
         ],
         synchronize: true,
       });

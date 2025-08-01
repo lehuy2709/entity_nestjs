@@ -15,6 +15,8 @@ import { QuestionModule } from './modules/question/module';
 import { TopicController } from './modules/topic/controller';
 import { TopicModule } from './modules/topic/module';
 import { UserModule } from './modules/user/module';
+import { StudentModule } from './modules/student/module';
+import { ImageModule } from './modules/image/module';
 
 @Module({
   imports: [
@@ -30,7 +32,9 @@ import { UserModule } from './modules/user/module';
     JobModule,
     QuestionModule,
     TopicModule,
-    UserModule
+    UserModule,
+    StudentModule,
+    ImageModule
   ],
   controllers: [],
   providers: [AppService],

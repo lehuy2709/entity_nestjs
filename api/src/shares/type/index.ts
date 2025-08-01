@@ -14,6 +14,8 @@ export * from './job'
 export * from './services'
 export * from './invitation'
 export * from './student'
+export * from './image'
+
 
 
 
