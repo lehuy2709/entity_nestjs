@@ -1,17 +1,16 @@
 import { Module } from '@nestjs/common';
-import { UserController } from './controller';
 import { UserService } from './services';
+import { UserServiceToken, UserEntityRepository, DATA_SOURCE } from '../../shares';
 import { DataSource } from 'typeorm';
-import { UserServiceToken, DATA_SOURCE } from '../../shares';
 import { UserEntity } from './entities';
-import { DatabaseModule } from '../../database/module';
+import { DatabaseModule } from 'src/database/module';
 
 @Module({
   imports: [DatabaseModule],
-  controllers: [UserController],
+  controllers: [],
   providers: [
     {
-      provide: 'UserEntityRepository',
+      provide: UserEntityRepository,
       useFactory: (dataSource: DataSource) =>
         dataSource.getRepository(UserEntity),
       inject: [DATA_SOURCE],
@@ -21,5 +20,6 @@ import { DatabaseModule } from '../../database/module';
       useClass: UserService,
     },
   ],
+  exports: [UserEntityRepository, UserServiceToken],
 })
 export class UserModule {}

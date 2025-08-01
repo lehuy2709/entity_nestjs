@@ -1,4 +1,4 @@
-import {ClassReqI, SubjectReqI, UserReqI, ClassUserReqI, ExamGroupReqI, ExamReqI, QuestionReqI, AnswerReqI, ExamResultReqI, TopicReqI, FileReqI, JobReqI} from "../../shares";
+import {ClassReqI, SubjectReqI, UserReqI, ClassUserReqI, ExamGroupReqI, ExamReqI, QuestionReqI, AnswerReqI, ExamResultReqI, TopicReqI, FileReqI, JobReqI, InvitationI} from "../../shares";
 
 export interface BaseServiceI <RequestI, ResponseI> {
   find: (params?: any) => Promise<ResponseI[]>
@@ -20,3 +20,8 @@ export interface ExamResultServiceI extends BaseServiceI<ExamResultReqI, any> {}
 export interface TopicServiceI extends BaseServiceI<TopicReqI, any> {}
 export interface FileServiceI extends BaseServiceI<FileReqI, any> {}
 export interface JobServiceI extends BaseServiceI<JobReqI, any> {}
+
+
+export interface InvitationServiceI {
+  invite: (invitation: InvitationI) => Promise<void>;
+}

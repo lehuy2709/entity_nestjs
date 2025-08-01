@@ -11,3 +11,10 @@ export const ExamResultServiceToken = 'ExamResultServiceI'
 export const TopicServiceToken = 'TopicServiceI'
 export const FileServiceToken = 'FileServiceI'
 export const JobServiceToken = 'JobServiceI'
+export const InvitationServiceToken = Symbol('InvitationServiceToken');
+export const StudentServiceToken = Symbol('StudentServiceI')
+
+
+export const ClassUserEntityRepository = Symbol('ClassUserEntityRepository');
+export const UserEntityRepository = Symbol('UserEntityRepository');
+

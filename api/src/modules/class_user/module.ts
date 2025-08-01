@@ -1,24 +1,29 @@
 import { Module } from '@nestjs/common';
-import { ClassUserController } from './controller';
-import { ClassUserService } from "./services";
+import { ClassUserService } from './services';
+import { DatabaseModule } from '../../database/module';
+import {
+  ClassUserServiceToken,
+  ClassUserEntityRepository,
+  DATA_SOURCE,
+} from '../../shares';
 import { DataSource } from 'typeorm';
-import {ClassUserServiceToken, DATA_SOURCE} from "../../shares";
-import { ClassUsersEntity } from "./entities";
-import {DatabaseModule} from "../../database/module";
+import { ClassUsersEntity } from './entities';
 
 @Module({
   imports: [DatabaseModule],
-  controllers: [ClassUserController],
+  controllers: [],
   providers: [
     {
-      provide: 'ClassUsersEntityRepository',
-      useFactory: (dataSource: DataSource) => dataSource.getRepository(ClassUsersEntity),
-      inject: [DATA_SOURCE]
+      provide: ClassUserEntityRepository,
+      useFactory: (dataSource: DataSource) =>
+        dataSource.getRepository(ClassUsersEntity),
+      inject: [DATA_SOURCE],
     },
     {
       provide: ClassUserServiceToken,
-      useClass: ClassUserService
-    }
+      useClass: ClassUserService,
+    },
   ],
+  exports: [ClassUserEntityRepository, ClassUserServiceToken],
 })
 export class ClassUserModule {}

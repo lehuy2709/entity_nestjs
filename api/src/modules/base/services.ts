@@ -13,10 +13,26 @@ export class BaseService<Entity extends BaseEntity>
     return this.repository.metadata.name;
   }
 
+  protected getPublicColumns() {
+    const privateColumns = [
+      'createdAt',
+      'createdBy',
+      'modifiedAt',
+      'modifiedBy',
+      'deletedAt',
+      'deletedBy',
+      'active',
+    ];
+    const columns = this.repository.metadata.columns.map(
+      (column) => column.propertyName,
+    );
+    return columns.filter((col) => !privateColumns.includes(col));
+  }
+
   protected handleSelect() {
     const query: SelectQueryBuilder<Entity> = this.repository
       .createQueryBuilder(this.getTableName())
-      .select();
+      .select(this.getPublicColumns());
     return query;
   }
 
@@ -35,18 +51,23 @@ export class BaseService<Entity extends BaseEntity>
     const query: SelectQueryBuilder<Entity> = this.repository
       .createQueryBuilder()
       .insert()
-      .values(data);
+      .values(data)
+      .returning(this.getPublicColumns());
 
-    query.execute();
+    const response = await query.execute();
+    return response.raw;
   }
 
   async updateOne(id, data) {
     const query = this.repository
       .createQueryBuilder('class')
       .update(data)
-      .where('id = :id', { id });
+      .where('id = :id', { id })
+      .returning(this.getPublicColumns());
 
-    query.execute();
+    const response = await query.execute();
+
+    return response.raw;
   }
 
   updateMany() {}

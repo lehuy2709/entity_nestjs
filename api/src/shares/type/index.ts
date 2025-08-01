@@ -12,6 +12,10 @@ export * from './topic'
 export * from './file'
 export * from './job'
 export * from './services'
+export * from './invitation'
+export * from './student'
+
+
 
 
 

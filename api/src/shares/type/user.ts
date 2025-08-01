@@ -1,4 +1,10 @@
-interface UserBaseI {
+export enum Role {
+  ADMIN = 'admin',
+  STUDENT = 'student',
+  TEACHER = 'teacher'
+}
+
+export interface UserBaseI {
   name: string;
   email: string;
   password: string;
