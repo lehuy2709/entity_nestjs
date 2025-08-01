@@ -40,10 +40,11 @@ export class BaseService<Entity extends BaseEntity>
     return query.where({ ...condition });
   }
 
-  async find() {
-    let query = this.handleSelect();
-    query = this.handleFind(query, { active: true });
-    return query.execute();
+
+  async find(condition= {}) {
+    let query = this.handleSelect()
+    query = this.handleFind(query, {...condition, active: true})
+    return query.execute()
   }
 
   async create(data) {

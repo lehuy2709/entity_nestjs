@@ -22,3 +22,19 @@ export interface UserI extends UserBaseI {
 export type UserReqI = UserBaseI;
 
 export type UserResI = UserI;
+
+export interface LoginI {
+  email: string;
+  password: string;
+}
+export interface RegisterI {
+  name: string;
+  email: string;
+  password: string;
+}
+
+
+export interface LoginResI {
+  accessToken: string;
+  refreshToken: string;
+}

@@ -1,12 +1,29 @@
-import {ClassReqI, SubjectReqI, UserReqI, ClassUserReqI, ExamGroupReqI, ExamReqI, QuestionReqI, AnswerReqI, ExamResultReqI, TopicReqI, FileReqI, JobReqI, InvitationI} from "../../shares";
-import { ImageReqI } from "./image";
+import {
+  ClassReqI,
+  SubjectReqI,
+  UserReqI,
+  ClassUserReqI,
+  ExamGroupReqI,
+  ExamReqI,
+  QuestionReqI,
+  AnswerReqI,
+  ExamResultReqI,
+  TopicReqI,
+  FileReqI,
+  JobReqI,
+  InvitationI,
+  LoginI,
+  LoginResI,
+  RegisterI,
+} from '../../shares';
+import { ImageReqI } from './image';
 
-export interface BaseServiceI <RequestI, ResponseI> {
-  find: (params?: any) => Promise<ResponseI[]>
-  findOne: (id: number) => Promise<ResponseI>
-  create: (data: RequestI) => Promise<ResponseI>
-  updateOne: (id: number, data: RequestI) => Promise<ResponseI>
-  softDelete: (id: number) => void
+export interface BaseServiceI<RequestI, ResponseI> {
+  find: (params?: any) => Promise<ResponseI[]>;
+  findOne: (id: number) => Promise<ResponseI>;
+  create: (data: RequestI) => Promise<ResponseI>;
+  updateOne: (id: number, data: RequestI) => Promise<ResponseI>;
+  softDelete: (id: number) => void;
 }
 
 export interface ClassServiceI extends BaseServiceI<ClassReqI, any> {}
@@ -25,4 +42,9 @@ export interface ImageServiceI extends BaseServiceI<ImageReqI, any> {}
 
 export interface InvitationServiceI {
   invite: (invitation: InvitationI) => Promise<void>;
+}
+
+export interface UserServiceI extends BaseServiceI<UserReqI, any> {
+  login: (LoginReq: LoginI) => Promise<LoginResI>;
+  register: (RegisterReq: RegisterI) => Promise<any>; 
 }
